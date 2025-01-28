@@ -5,17 +5,16 @@
   "type": "module",
   "js-framework-benchmark": {
     "frameworkVersion": "0.0.1",
-    "frameworkHomeURL": "https://chrisshank.com/",
+    "frameworkHomeURL": "https://github.com/ChrisShank/progressive-element",
     "customURL": "/dist",
     "useShadowRoot": false
   },
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "vite build",
     "preview": "vite preview"
   },
   "devDependencies": {
-    "typescript": "~5.6.2",
     "vite": "^6.0.5"
   }
 }
