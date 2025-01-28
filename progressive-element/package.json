@@ -1,20 +1,17 @@
 {
   "name": "js-framework-benchmark-progressive-element",
   "private": true,
-  "version": "0.0.1",
+  "version": "1.0.0",
   "type": "module",
   "js-framework-benchmark": {
-    "frameworkVersion": "0.0.1",
+    "frameworkVersion": "",
     "frameworkHomeURL": "https://github.com/ChrisShank/progressive-element",
     "customURL": "/dist",
-    "useShadowRoot": false
+    "useShadowRoot": false,
+    "issues": [772]
   },
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
-  },
-  "devDependencies": {
-    "vite": "^6.0.5"
+    "dev": "exit 0",
+    "build-prod": "exit 0"
   }
 }
