@@ -2,24 +2,22 @@ const adjectives = ['pretty', 'large', 'big', 'small', 'tall', 'short', 'long', 
 const colours = ['red', 'yellow', 'blue', 'green', 'pink', 'brown', 'purple', 'brown', 'white', 'black', 'orange'];
 const nouns = ['table', 'chair', 'house', 'bbq', 'desk', 'car', 'pony', 'cookie', 'sandwich', 'burger', 'pizza', 'mouse', 'keyboard'];
 
-const pick = (dict: string[]) => dict[Math.round(Math.random() * 1000) % dict.length];
+const pick = (dict) => dict[Math.round(Math.random() * 1000) % dict.length];
 const label = () => `${pick(adjectives)} ${pick(colours)} ${pick(nouns)}`;
 
 class WordList extends HTMLElement {
 	tbody = this.querySelector('tbody');
 	rowTemplate = this.querySelector('template');
 	rowId = 1;
-	selectedRow: HTMLTableRowElement | null = null;
+	selectedRow = null;
 
 	constructor() {
 		super();
 		this.addEventListener('click', this);
 	}
 
-	handleEvent(event: Event) {
+	handleEvent(event) {
 		const { intention, target } = findClosestIntention(event);
-
-		if (intention === undefined) return;
 
 		event.stopPropagation();
 
@@ -39,15 +37,9 @@ class WordList extends HTMLElement {
 				return;
 			}
 			case 'UPDATE_10th_ROW': {
-				if (this.tbody) {
-					const rows = this.tbody.children;
-					for (let i = 0; i < rows.length; i += 10) {
-					const label = rows[i].querySelector('td:nth-child(2) > a');
-					if (label && label.firstChild) {
-						label.firstChild.nodeValue += ' !!!';
-					}
-					}
-				}
+				this.tbody
+					.querySelectorAll('tr:nth-child(10n+1) > td:nth-child(2) > a')
+					.forEach((label) => (label.firstChild.nodeValue += ' !!!'));
 				return;
 			}
 			case 'SELECT_ROW': {
@@ -84,49 +76,40 @@ class WordList extends HTMLElement {
 	}
 
 	addRows(n = 1000) {
-		if (!this.tbody || !this.rowTemplate) return;
-    const fragment = document.createDocumentFragment();
-
-    while (n > 0) {
-      const tr = this.rowTemplate.content.cloneNode(true) as HTMLTableRowElement;
-      const td1 = tr.querySelector('td:nth-child(1)');
-      if (td1) td1.textContent = String(this.rowId++);
-      const td2a = tr.querySelector('td:nth-child(2) a');
-      if (td2a) td2a.textContent = label();
-      fragment.appendChild(tr);
-      n -= 1;
-    }
-
-    this.tbody.appendChild(fragment);
+		while (n > 0) {
+			const row = this.rowTemplate.content.cloneNode(true);
+			const firstCell = row.firstElementChild.firstElementChild;
+			firstCell.textContent = this.rowId++;
+			// update <a> of second cell
+			firstCell.nextElementSibling.firstElementChild.textContent = label();
+			this.tbody.appendChild(row);
+			n -= 1;
+		}
 	}
 
 	clearRows() {
-		if (!this.tbody) return;
     this.tbody.textContent = '';
     this.selectedRow = null;
 	}
 
 	swapRows() {
-		if (!this.tbody || this.tbody.children.length < 2) return;
-		const secondRow = this.tbody.children[1];
-		const secondToLastRow = this.tbody.children[this.tbody.children.length - 2];
+		const secondRow = this.tbody.firstElementChild.nextElementSibling;
+		const secondToLastRow = this.tbody.lastElementChild.previousElementSibling;
 		this.tbody.insertBefore(secondToLastRow, secondRow);
-		this.tbody.insertBefore(secondRow, this.tbody.children[this.tbody.children.length - 1]);
+		this.tbody.insertBefore(secondRow, this.tbody.lastElementChild);
   }
 }
 
 customElements.define('word-list', WordList);
 
-function findClosestIntention(event: Event) {
-  if (event.target instanceof Element) {
-    const attributeName = `on:${event.type}`;
-    let target = event.target;
-    while (target && target.parentElement && !target.hasAttribute(attributeName)) {
-      target = target.parentElement;
-    }
-    if (target) {
-      return { intention: target.getAttribute(attributeName), target };
-    }
-  }
+function findClosestIntention(event) {
+	const attributeName = 'on:' + event.type;
+	let target = event.target;
+	while (target && target.parentElement && !target.hasAttribute(attributeName)) {
+		target = target.parentElement;
+	}
+	if (target) {
+		return { intention: target.getAttribute(attributeName), target };
+	}
   return {};
 }
