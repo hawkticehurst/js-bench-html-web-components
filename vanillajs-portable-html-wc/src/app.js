@@ -10,6 +10,9 @@ const {cloneNode} = Node.prototype;
 const clone = n => cloneNode.call(n, true);
 const insert = (parent, node, ref) => parent.insertBefore(node, ref);
 
+const TROW = document.createElement('template');
+TROW.innerHTML = '<tr><td class="col-md-1">?</td><td class="col-md-4"><a>?</a></td><td class="col-md-1"><a><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a></td><td class="col-md-6"></td></tr>';
+
 class JsBench extends HTMLElement {
   ID = 1;
   SEL = null;
@@ -57,8 +60,6 @@ class JsBench extends HTMLElement {
 
     this.TABLE = this.querySelector('table');
     this.TBODY = this.querySelector('tbody');
-    this.TROW = document.createElement('template');
-    this.TROW.innerHTML = '<tr><td class="col-md-1">?</td><td class="col-md-4"><a>?</a></td><td class="col-md-1"><a><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a></td><td class="col-md-6"></td></tr>';
     this.BUTTONS = this.querySelectorAll('button');
     this.ROWS = this.TBODY.children;
     
@@ -93,7 +94,7 @@ class JsBench extends HTMLElement {
   }
   create(count, add = false) {
     if (this.SIZE !== count) {
-      this.TMPL = clone(this.TROW.content);
+      this.TMPL = clone(TROW.content);
       [...Array((this.SIZE = count) / 50 - 1)].forEach(() => {
         this.TMPL.append(clone(this.TMPL.firstChild));
       });
