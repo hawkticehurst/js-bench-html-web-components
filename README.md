@@ -11,7 +11,7 @@ This repo contains a few experiments creating benchmarks that use HTML Web Compo
 
 These benchmarks were run locally on a 2021 M1 Macbook Pro with 16GB RAM. The tests were conducted in January 2025.
 
-![Screenshot of local benchmark run with several major web frameworks. The vanilla JS HTML web component implementation is the second fastest, the HTML web component inside SolidJS implementation is the third fastest, and the Progressive Element implementation is the seventh fastest.](./assets/benchmark-results-01-27-25.png)
+![Screenshot of local benchmark run with several major web frameworks. The vanilla JS HTML web component implementation is the second fastest, the HTML web component inside SolidJS implementation is the third fastest, and the Progressive Element implementation is the seventh fastest.](./assets/benchmark-results-01-28-25.png)
 
 _Note: While the performance of benchmark runs showed in this photo are fairly close to the [most recent official run](https://krausest.github.io/js-framework-benchmark/2025/table_chrome_132.0.6834.83.html) of the JS Framework Benchmark, the performance for Solid and Svelte is notably worse (despite multiple re-runs). Both frameworks should have a weighted geometric mean of about 1.07, so keep in mind they should be faster than the vanilla-wc implementation._
 
