@@ -8,6 +8,7 @@ const labelOf = r => r.firstChild.nextSibling.firstChild.firstChild;
 
 const {cloneNode} = Node.prototype;
 const clone = n => cloneNode.call(n, true);
+const insert = (parent, node, ref) => parent.insertBefore(node, ref);
 
 class JsBench extends HTMLElement {
   ID = 1;
@@ -24,18 +25,7 @@ class JsBench extends HTMLElement {
     this.ROWS = this.TBODY.children;
     
     this.BUTTONS.forEach(b => b.addEventListener("click", this[b.id].bind(this)));
-    this.TBODY.addEventListener("click", this.handleEvent);
-  }
-  handleEvent(e) {
-    const t = e.target;
-    const n = t.tagName;
-    const r = t.closest('TR');
-    e.stopPropagation();
-    if (n == 'SPAN' || n == 'A' && t.firstElementChild) {
-      r.remove();
-    } else if (n == 'A' && (this.SEL && (this.SEL.className = ''), (this.SEL = r))) {
-      this.SEL.className = 'danger';
-    }
+    this.TBODY.addEventListener("click", this.rowSelect.bind(this));
   }
   run() {
     this.create(1000);
@@ -59,8 +49,8 @@ class JsBench extends HTMLElement {
     const [, r1, r2] = this.ROWS;
     const r998 = this.ROWS[998];
     if (r998) {
-      this.insert(this.TBODY, r1, r998);
-      this.insert(this.TBODY, r998, r2);
+      insert(this.TBODY, r1, r998);
+      insert(this.TBODY, r998, r2);
     }
   }
   create(count, add = false) {
@@ -80,14 +70,22 @@ class JsBench extends HTMLElement {
         (r.$label ??= labelOf(r)).nodeValue = label();
         count--;
       }
-      this.insert(this.TBODY, clone(this.TMPL), null);
+      insert(this.TBODY, clone(this.TMPL), null);
     }
     if (!add) {
       this.TABLE.append(this.TBODY);
     }
   }
-  insert(parent, node, ref) {
-    parent.insertBefore(node, ref);
+  rowSelect(e) {
+    const t = e.target;
+    const n = t.tagName;
+    const r = t.closest('TR');
+    e.stopPropagation();
+    if (n == 'SPAN' || n == 'A' && t.firstElementChild) {
+      r.remove();
+    } else if (n == 'A' && (this.SEL && (this.SEL.className = ''), (this.SEL = r))) {
+      this.SEL.className = 'danger';
+    }
   }
 }
 
