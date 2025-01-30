@@ -13,6 +13,42 @@ const insert = (parent, node, ref) => parent.insertBefore(node, ref);
 const TROW = document.createElement('template');
 TROW.innerHTML = '<tr><td class="col-md-1">?</td><td class="col-md-4"><a>?</a></td><td class="col-md-1"><a><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a></td><td class="col-md-6"></td></tr>';
 
+const MARKUP = `<div class="container">
+  <div class="jumbotron">
+    <div class="row">
+      <div class="col-md-6">
+        <h1>Portable HTML Web Components (keyed)</h1>
+      </div>
+      <div class="col-md-6">
+        <div class="row">
+          <div class="col-sm-6 smallpad">
+            <button type="button" class="btn btn-primary btn-block" id="run">Create 1,000 rows</button>
+          </div>
+          <div class="col-sm-6 smallpad">
+            <button type="button" class="btn btn-primary btn-block" id="runlots">Create 10,000 rows</button>
+          </div>
+          <div class="col-sm-6 smallpad">
+            <button type="button" class="btn btn-primary btn-block" id="add">Append 1,000 rows</button>
+          </div>
+          <div class="col-sm-6 smallpad">
+            <button type="button" class="btn btn-primary btn-block" id="update">Update every 10th row</button>
+          </div>
+          <div class="col-sm-6 smallpad">
+            <button type="button" class="btn btn-primary btn-block" id="clear">Clear</button>
+          </div>
+          <div class="col-sm-6 smallpad">
+            <button type="button" class="btn btn-primary btn-block" id="swaprows">Swap Rows</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <table class="table table-hover table-striped test-data">
+    <tbody id="tbody"></tbody>
+  </table>
+  <span class="preloadicon glyphicon glyphicon-remove" aria-hidden="true"></span>
+</div>`;
+
 class JsBench extends HTMLElement {
   ID = 1;
   SEL = null;
@@ -21,43 +57,7 @@ class JsBench extends HTMLElement {
 
   constructor() {
     super();
-    this.innerHTML = `
-    <div class="container">
-      <div class="jumbotron">
-        <div class="row">
-          <div class="col-md-6">
-            <h1>Portable HTML Web Components (keyed)</h1>
-          </div>
-          <div class="col-md-6">
-            <div class="row">
-              <div class="col-sm-6 smallpad">
-                <button type="button" class="btn btn-primary btn-block" id="run">Create 1,000 rows</button>
-              </div>
-              <div class="col-sm-6 smallpad">
-                <button type="button" class="btn btn-primary btn-block" id="runlots">Create 10,000 rows</button>
-              </div>
-              <div class="col-sm-6 smallpad">
-                <button type="button" class="btn btn-primary btn-block" id="add">Append 1,000 rows</button>
-              </div>
-              <div class="col-sm-6 smallpad">
-                <button type="button" class="btn btn-primary btn-block" id="update">Update every 10th row</button>
-              </div>
-              <div class="col-sm-6 smallpad">
-                <button type="button" class="btn btn-primary btn-block" id="clear">Clear</button>
-              </div>
-              <div class="col-sm-6 smallpad">
-                <button type="button" class="btn btn-primary btn-block" id="swaprows">Swap Rows</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <table class="table table-hover table-striped test-data">
-        <tbody id="tbody"></tbody>
-      </table>
-      <span class="preloadicon glyphicon glyphicon-remove" aria-hidden="true"></span>
-    </div>`;
-
+    this.innerHTML = MARKUP;
     this.TABLE = this.querySelector('table');
     this.TBODY = this.querySelector('tbody');
     this.BUTTONS = this.querySelectorAll('button');
